@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конвертер Валют</title>
+    <link rel="icon" id="favicon-link" href="lane.png" type="image/png">
+    <!-- Гугл шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Шапка сайта -->
+        <header class="app-header">
+            <div class="logo-section">
+                <div>
+                    <h1 class="logo-text">Конвертер</h1>
+                    <p class="logo-sub">Курсовой проект Ермуков М.</p>
+                </div>
+            </div>
+            <div class="header-controls">
+                <div class="status-badge" id="api-status">
+                    <span class="status-indicator dot-green" id="api-status-indicator"></span>
+                    <span class="status-text" id="api-status-text">Загрузка данных...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Главная рабочая область -->
+        <main class="main-content">
+            <!-- Левая колонка: Калькулятор -->
+            <section class="converter-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-calculator"></i> Калькулятор конвертации</h2>
+                    <span class="date-badge" id="last-update-badge">Курсы от: --.--.----</span>
+                </div>
+
+                <div id="converter-form">
+                    <!-- Поле ввода суммы -->
+                    <div class="input-group" id="amount-input-group">
+                        <label for="amount-input">Сумма для конвертации</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="amount-input" placeholder="Введите сумму..." min="0" step="any" required autocomplete="off" oninput="handleAmountInput()">
+                            <span class="input-addon" id="amount-addon">USD</span>
+                        </div>
+                        <span class="validation-message" id="amount-validation-error">Пожалуйста, введите положительное число</span>
+                    </div>
+
+                    <!-- Выбор валют -->
+                    <div class="currency-selectors">
+                        <div class="select-group">
+                            <label for="from-currency">Из валюты</label>
+                            <div class="custom-select-wrapper">
+                                
+                            </div>
+                        </div>
+
+                        
+
+                        <div class="select-group">
+                            <label for="to-currency">В валюту</label>
+                            <div class="custom-select-wrapper">
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Выбор даты -->
+                    <div class="input-group">
+                        <label for="rate-date">Дата курса валют</label>
+                        <div class="date-wrapper">
+                            
+                        <span class="info-message">ЦБ РФ обновляет курсы раз в день по будням</span>
+                    </div>
+
+                    <!-- Кнопка действия -->
+                    
+
+                <!-- Вывод результатов -->
+                <div class="result-area hidden" id="result-container">
+                    <div class="result-box">
+                        <div class="result-from" id="result-from-text">100 USD =</div>
+                        <div class="result-to" id="result-to-text">9 150.00 RUB</div>
+                        <div class="rate-details">
+                            <span id="rate-info-direct">1 USD = 91.5000 RUB</span>
+                            <span class="rate-separator">•</span>
+                            <span id="rate-info-reverse">1 RUB = 0.0109 USD</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Правая колонка: Котировки и История -->
+            <div class="dashboard-side">
+                <!-- Таблица популярных курсов -->
+                <section class="converter-section">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-chart-simple"></i> Популярные курсы</h2>
+                        <div class="base-selector">
+                            <label for="base-currency-table">База:</label>
+
+                        </div>
+                    </div>
+                    <div class="rates-table-wrapper">
+                        <table class="rates-table">
+                            <thead>
+                                <tr>
+                                    <th>Валюта</th>
+                                    <th>Код</th>
+                                    <th class="text-right">Курс</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rates-table-body">
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted">Загрузка курсов...</td>
+                                    <!-- Курсы подгружаются динамически -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- История -->
+                <section class="converter-section">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-history"></i> История конвертаций</h2>
+                    </div>
+                    <div class="history-list-container">
+                        <div class="empty-history" id="empty-history-text">
+                            <p>История пуста. Сделайте первую конвертацию!</p>
+                        </div>
+                        <ul class="history-list" id="history-list">
+                            <!-- История подгружается динамически -->
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
