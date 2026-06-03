@@ -41,11 +41,13 @@
                     <span class="date-badge" id="last-update-badge">Курсы от: --.--.----</span>
                 </div>
 
+                <!-- Обработчик отправки формы задан через onsubmit -->
                 <div id="converter-form">
                     <!-- Поле ввода суммы -->
                     <div class="input-group" id="amount-input-group">
                         <label for="amount-input">Сумма для конвертации</label>
                         <div class="input-wrapper">
+                            <!-- Обработчик ввода текста задан через oninput -->
                             <input type="number" id="amount-input" placeholder="Введите сумму..." min="0" step="any" required autocomplete="off" oninput="handleAmountInput()">
                             <span class="input-addon" id="amount-addon">USD</span>
                         </div>
@@ -57,16 +59,24 @@
                         <div class="select-group">
                             <label for="from-currency">Из валюты</label>
                             <div class="custom-select-wrapper">
-                                
+                                <!-- Обработчик выбора валюты задан через onchange -->
+                                <select id="from-currency" required onchange="handleCurrencyChange()">
+                                    <!-- Валюты загружаются динамически -->
+                                </select>
                             </div>
                         </div>
 
-                        
+                        <!-- Обработчик клика кнопки Swap задан через onclick -->
+                        <button type="button" class="swap-button" id="swap-btn" title="Поменять местами" onclick="handleSwap()">
+                            <i class="fa-solid fa-right-left"></i>
+                        </button>
 
                         <div class="select-group">
                             <label for="to-currency">В валюту</label>
                             <div class="custom-select-wrapper">
-                                
+                                <select id="to-currency" required onchange="handleCurrencyChange()">
+                                    <!-- Валюты загружаются динамически -->
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -75,12 +85,16 @@
                     <div class="input-group">
                         <label for="rate-date">Дата курса валют</label>
                         <div class="date-wrapper">
-                            
+                            <!-- Обработчик изменения даты задан через onchange -->
+                            <input type="date" id="rate-date" max="" onchange="handleDateChange(this.value)">
+                            <button type="button" class="secondary-button" id="today-btn" onclick="handleToday()">Сегодня</button>
+                        </div>
                         <span class="info-message">ЦБ РФ обновляет курсы раз в день по будням</span>
                     </div>
 
                     <!-- Кнопка действия -->
-                    
+                    <button type="button" class="primary-button" id="convert-btn" onclick="handleConvert(true)">Конвертировать</button>
+                </div>
 
                 <!-- Вывод результатов -->
                 <div class="result-area hidden" id="result-container">
@@ -104,7 +118,13 @@
                         <h2><i class="fa-solid fa-chart-simple"></i> Популярные курсы</h2>
                         <div class="base-selector">
                             <label for="base-currency-table">База:</label>
-
+                            <!-- Обработчик изменения базы задан через onchange -->
+                            <select id="base-currency-table" onchange="handleBaseCurrencyChange()">
+                                <option value="RUB">RUB</option>
+                                <option value="USD" selected>USD</option>
+                                <option value="EUR">EUR</option>
+                                <option value="CNY">CNY</option>
+                            </select>
                         </div>
                     </div>
                     <div class="rates-table-wrapper">
@@ -130,6 +150,8 @@
                 <section class="converter-section">
                     <div class="card-header">
                         <h2><i class="fa-solid fa-history"></i> История конвертаций</h2>
+                        <!-- Обработчик клика очистки истории задан через onclick -->
+                        <button type="button" class="text-button" id="clear-history-btn" disabled onclick="handleClearHistory()">Очистить</button>
                     </div>
                     <div class="history-list-container">
                         <div class="empty-history" id="empty-history-text">
@@ -143,5 +165,13 @@
             </div>
         </main>
     </div>
+
+    <!-- Контейнер для уведомлений -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Скрипты приложения -->
+    <script src="storage.js"></script>
+    <script src="api.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
