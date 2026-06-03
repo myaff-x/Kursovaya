@@ -88,3 +88,18 @@ const convertCurrency = (amount, fromCode, toCode, valuteData) => {
     };
 };
 
+// СОРТИРОВКА ВАЛЮТ
+const getSortedCurrencies = (valuteData) => {
+    const list = Object.keys(valuteData).map(code => ({
+        code: code,
+        name: valuteData[code].Name
+    }));
+    return list.sort((a, b) => {
+        const aIdx = POPULAR_CURRENCIES.indexOf(a.code);
+        const bIdx = POPULAR_CURRENCIES.indexOf(b.code);
+        if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+        if (aIdx !== -1) return -1;
+        if (bIdx !== -1) return 1;
+        return a.name.localeCompare(b.name);
+    });
+};
