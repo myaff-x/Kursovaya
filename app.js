@@ -103,3 +103,32 @@ const getSortedCurrencies = (valuteData) => {
         return a.name.localeCompare(b.name);
     });
 };
+
+// ТАБЛИЦА КУРСОВ СПРАВА
+const renderRatesTable = () => {
+    if (!currencyRates) return;
+    const baseCode = baseCurrencyTable.value;
+    const baseVal = currencyRates[baseCode].Value / currencyRates[baseCode].Nominal;
+
+    let html = '';
+    
+    POPULAR_CURRENCIES.filter(code => code !== baseCode).forEach(code => {
+        const curr = currencyRates[code];
+        if (!curr) return;
+
+        const val = curr.Value / curr.Nominal;
+        const rate = baseVal / val;
+
+        // Склеиваем строки таблицы
+        html += `
+            <tr>
+                <td>${curr.Name}</td>
+                <td><strong>${code}</strong></td>
+                <td class="text-right"><strong>${rate.toFixed(4)}</strong></td>
+            </tr>
+        `;
+    });
+    
+    // Заменяем внутреннее содержимое таблицы на сгенерированный HTML
+    ratesTableBody.innerHTML = html;
+};
