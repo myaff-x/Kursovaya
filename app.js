@@ -132,3 +132,30 @@ const renderRatesTable = () => {
     // Заменяем внутреннее содержимое таблицы на сгенерированный HTML
     ratesTableBody.innerHTML = html;
 };
+
+// ЗАПОЛНЕНИЕ ВЫПАДАЮЩИХ СПИСКОВ
+const populateCurrencyDropdowns = (valuteData) => {
+    const currencies = getSortedCurrencies(valuteData);
+    const prevFrom = fromCurrency.value;
+    const prevTo = toCurrency.value;
+
+    fromCurrency.innerHTML = '';
+    toCurrency.innerHTML = '';
+
+    currencies.forEach(curr => {
+        const oFrom = new Option(`${curr.code} - ${curr.name}`, curr.code);
+        const oTo = new Option(`${curr.code} - ${curr.name}`, curr.code);
+        fromCurrency.add(oFrom);
+        toCurrency.add(oTo);
+    });
+
+    userSettings = getSettings();
+    fromCurrency.value = (prevFrom && valuteData[prevFrom]) ? prevFrom : userSettings.defaultFrom;
+    toCurrency.value = (prevTo && valuteData[prevTo]) ? prevTo : userSettings.defaultTo;
+    
+    updateInputAddon();
+};
+
+const updateInputAddon = () => {
+    amountAddon.textContent = fromCurrency.value;
+};
