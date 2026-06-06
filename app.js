@@ -159,3 +159,57 @@ const populateCurrencyDropdowns = (valuteData) => {
 const updateInputAddon = () => {
     amountAddon.textContent = fromCurrency.value;
 };
+
+// ГЛОБАЛЬНЫЕ ФУНКЦИИ СОБЫТИЙ
+
+// Валидация суммы при наборе текста
+const handleAmountInput = () => {
+    if (validateAmount(amountInput.value).isValid || amountInput.value === '') {
+        amountInputGroup.classList.remove('invalid');
+    }
+};
+
+// Смена валюты в калькуляторе
+const handleCurrencyChange = () => {
+    updateInputAddon();
+    if (amountInput.value !== '') handleConvert(false);
+};
+
+// Клик по кнопке реверса валют (Swap)
+const handleSwap = () => {
+    const f = fromCurrency.value;
+    fromCurrency.value = toCurrency.value;
+    toCurrency.value = f;
+    updateInputAddon();
+    if (amountInput.value !== '') handleConvert(false);
+};
+
+// Клик по кнопке "Сегодня"
+const handleToday = () => {
+    const today = new Date().toISOString().split('T')[0];
+    if (rateDate.value !== today) {
+        rateDate.value = today;
+        selectedDate = today;
+        loadRatesForDate('');
+    }
+};
+
+// Изменение даты в календаре
+const handleDateChange = (val) => {
+    selectedDate = val;
+    loadRatesForDate(selectedDate);
+};
+
+// Изменение базы в таблице популярных курсов
+const handleBaseCurrencyChange = () => {
+    renderRatesTable();
+};
+
+// Инициализация при загрузке
+const today = new Date().toISOString().split('T')[0];
+rateDate.setAttribute('max', today);
+rateDate.value = today;
+selectedDate = today;
+
+renderHistory();
+loadRatesForDate('');
