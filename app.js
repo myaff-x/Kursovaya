@@ -160,6 +160,61 @@ const updateInputAddon = () => {
     amountAddon.textContent = fromCurrency.value;
 };
 
+// ОТРИСОВКА ИСТОРИИ
+const renderHistory = () => {
+    conversionHistory = getHistory();
+    historyList.innerHTML = '';
+
+    if (conversionHistory.length === 0) {
+        emptyHistoryText.style.display = 'flex';
+        clearHistoryBtn.disabled = true;
+        return;
+    }
+
+    emptyHistoryText.style.display = 'none';
+    clearHistoryBtn.disabled = false;
+
+    let html = '';
+
+    conversionHistory.forEach(item => {
+        const dt = new Date(item.timestamp);
+        
+        let hours = dt.getHours();
+        if (hours < 10) hours = '0' + hours;
+        
+        let minutes = dt.getMinutes();
+        if (minutes < 10) minutes = '0' + minutes;
+        
+        let day = dt.getDate();
+        if (day < 10) day = '0' + day;
+        
+        let month = dt.getMonth() + 1;
+        if (month < 10) month = '0' + month;
+        
+        const timeStr = hours + ':' + minutes + ' ' + day + '.' + month;
+        
+        // Вставляем обработчики onload / onclick прямо в HTML
+        html += `
+            <li class="history-item" onclick="handleLoadHistoryItem('${item.id}')">
+                <div class="history-item-details">
+                    <div class="history-item-conversion">
+                        ${item.amount} ${item.from} → <span class="trend-up">${item.result} ${item.to}</span>
+                    </div>
+                    <div class="history-item-time">
+                        ${timeStr} ${item.date ? ` курс на ${item.date}` : ''}
+                    </div>
+                </div>
+                <div class="history-actions">
+                    <button type="button" class="history-action-btn delete" onclick="event.stopPropagation(); handleDeleteHistoryItem('${item.id}')" title="Удалить">🗑️</button>
+                </div>
+            </li>
+        `;
+    });
+    
+    // Вставляем список истории целиком
+    historyList.innerHTML = html;
+};
+
 // ГЛОБАЛЬНЫЕ ФУНКЦИИ СОБЫТИЙ
 
 // Валидация суммы при наборе текста
