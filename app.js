@@ -215,6 +215,45 @@ const renderHistory = () => {
     historyList.innerHTML = html;
 };
 
+// Расчет конвертации
+const handleConvert = (shouldSave = true) => {
+    const rawVal = amountInput.value;
+    const check = validateAmount(rawVal);
+    const group = amountInputGroup;
+
+    if (!check.isValid) {
+        group.classList.add('invalid');
+        amountValidationError.textContent = check.message;
+        resultContainer.classList.add('hidden');
+        return;
+    }
+    group.classList.remove('invalid');
+
+    try {
+        const amount = parseFloat(rawVal);
+        const from = fromCurrency.value;
+        const to = toCurrency.value;
+
+        const { result, rateDirect, rateReverse } = convertCurrency(amount, from, to, currencyRates);
+
+        resultFromText.textContent = `${amount} ${from} =`;
+        resultToText.textContent = `${result} ${to}`;
+
+        rateInfoDirect.textContent = `1 ${from} = ${rateDirect.toFixed(4)} ${to}`;
+        rateInfoReverse.textContent = `1 ${to} = ${rateReverse.toFixed(4)} ${from}`;
+
+        resultContainer.classList.remove('hidden');
+
+        if (shouldSave) {
+            addToHistory(from, to, amount, result, ratesDate);
+            renderHistory();
+        }
+        saveSettings(from, to);
+    } catch (e) {
+        showToast(e.message, 'error');
+    }
+};
+
 // ГЛОБАЛЬНЫЕ ФУНКЦИИ СОБЫТИЙ
 
 // Валидация суммы при наборе текста
