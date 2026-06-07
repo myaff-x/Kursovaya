@@ -215,6 +215,52 @@ const renderHistory = () => {
     historyList.innerHTML = html;
 };
 
+// ЗАГРУЗКА КУРСОВ И КОНВЕРТАЦИЯ
+const loadRatesForDate = (dateStr) => {
+    convertBtn.disabled = true;
+    convertBtn.textContent = 'Загрузка...';
+    updateStatusBadge('loading', 'Загрузка...');
+
+    const onSuccess = (res) => {
+        currencyRates = res.valute;
+        ratesDate = res.date;
+        isOffline = res.offline;
+
+        const [y, m, d] = res.date.split('-');
+        lastUpdateBadge.textContent = `Курсы от: ${d}.${m}.${y}`;
+
+        populateCurrencyDropdowns(currencyRates);
+        renderRatesTable();
+
+        updateStatusBadge(isOffline ? 'offline' : 'online', isOffline ? 'Оффлайн режим' : 'Курсы обновлены');
+        if (isOffline) {
+            showToast('Курсы взяты из кэша (нет сети).', 'warning');
+        } else {
+            if (!res.fromCache && !dateStr) {
+                showToast(`Курсы обновлены за сегодня`, 'success');
+            }
+        }
+
+        convertBtn.disabled = false;
+        convertBtn.textContent = 'Конвертировать';
+
+        if (amountInput.value !== '') handleConvert(false);
+    };
+
+    const onError = (e) => {
+        updateStatusBadge('error', 'Ошибка');
+        showToast(e.message || 'Ошибка сети', 'error');
+        convertBtn.disabled = false;
+        convertBtn.textContent = 'Повторить';
+    };
+
+    if (dateStr) {
+        fetchHistoricalRates(dateStr, onSuccess, onError);
+    } else {
+        fetchLatestRates(onSuccess, onError);
+    }
+};
+
 // Расчет конвертации
 const handleConvert = (shouldSave = true) => {
     const rawVal = amountInput.value;
