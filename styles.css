@@ -36,6 +36,7 @@ body {
     padding-bottom: 15px;
 }
 
+/* Точка состояния */
 .status-badge {
     display: flex;
     align-items: center;
@@ -63,6 +64,7 @@ body {
     gap: 20px;
 }
 
+/*растягиваться(поровну), сжиматься, базовый размер 350 пикселей */
 .main-content > .converter-section, .main-content > .dashboard-side {
     flex: 1 1 350px;
 }
