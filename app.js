@@ -345,6 +345,38 @@ const handleBaseCurrencyChange = () => {
     renderRatesTable();
 };
 
+// Очистка истории операций
+const handleClearHistory = () => {
+    if (confirm('Очистить всю историю?')) {
+        clearHistory();
+        renderHistory();
+        showToast('История очищена', 'success');
+    }
+};
+
+// Выбор конкретной записи в истории (onclick на элементе li в истории)
+const handleLoadHistoryItem = (id) => {
+    const item = conversionHistory.find(x => x.id === id);
+    if (item) {
+        amountInput.value = item.amount;
+        fromCurrency.value = item.from;
+        toCurrency.value = item.to;
+        updateInputAddon();
+        if (item.date) {
+            rateDate.value = item.date;
+            selectedDate = item.date;
+        }
+        handleConvert(true);
+    }
+};
+
+// Удаление конкретной записи в истории (onclick на кнопке удаления)
+const handleDeleteHistoryItem = (id) => {
+    deleteFromHistory(id);
+    renderHistory();
+    showToast('Запись удалена', 'info');
+};
+
 // Инициализация при загрузке
 const today = new Date().toISOString().split('T')[0];
 rateDate.setAttribute('max', today);
