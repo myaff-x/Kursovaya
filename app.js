@@ -385,3 +385,33 @@ selectedDate = today;
 
 renderHistory();
 loadRatesForDate('');
+
+// Анимация иконки
+const faviconLink = document.getElementById('favicon-link');
+let isFaviconBlack = true;
+
+setInterval(() => {
+    if (isFaviconBlack) {
+        faviconLink.href = 'lane.png';
+    } else {
+        faviconLink.href = 'lane2.png';
+    }
+    isFaviconBlack = !isFaviconBlack;
+}, 1000);
+
+// Анимация текста сверху
+const fullTitle = "Конвертер валют";
+let titleIndex = 1;
+
+setInterval(() => {
+    // Вырезаем кусочек строки от 0 до текущего индекса
+    document.title = fullTitle.substring(0, titleIndex);
+    
+    // Увеличиваем индекс на 1 для следующего шага
+    titleIndex = titleIndex + 1;
+    
+    // Если дошли до конца строки, сбрасываем на первую букву
+    if (titleIndex > fullTitle.length) {
+        titleIndex = 1;
+    }
+}, 1000);
